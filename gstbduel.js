@@ -3,18 +3,25 @@ var GsTb = require('groupstage-tb');
 var Duel = require('duel');
 
 var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, initParent) {
-  this._current = new GsTb(this.numPlayers, opts.groupStage);
-  initParent();
+  initParent(new GsTb(this.numPlayers, opts.groupStage)); // stored on this._inst
 });
 
 GsTbDuel.configure({
+  // NB: this simple version works only because Duel has `np` agnostic statics
+  // it would fail if the last stage was FFA which relies on correct `np`
+  // TODO: figure out what to do in this case
   defaults: function (np, opts) {
-    // TODO: use GroupStageTb.defaults
-    // TODO: use Duel.defaults
+    opts.gsTbOpts = opts.gsTbOpts || {};
+    GsTb.defaults(np, opts.gsTbOpts);
+    opts.duelOpts = opts.duelOpts || {};
+    Duel.defaults(np, opts.duelOpts);
   },
   invalid: function (np, opts) {
-    // TODO: validate GroupStage-Tb style
-    // TODO: validate Duel style based on how many should proceed
+    var invReason = GsTb.invalid(np, opts.gsTbOpts);
+    if (invReason !== null) {
+      return invReason;
+    }
+    invReason = Duel.invalid(np, opts.duelOpts);
   }
 });
 
@@ -23,31 +30,37 @@ GsTbDuel.configure({
 //------------------------------------------------------------------
 
 GsTbDuel.prototype.inGroupStage = function () {
-  var rnd = this._current;
-  return rnd.name === 'GroupStage-Tb' && !rnd.isTieBreakerRound();
+  var rnd = this._inst;
+  return rnd.name === 'GroupStage-Tb' && rnd.inGroupStage();
 };
 
 GsTbDuel.prototype.inTieBreaker = function () {
-  var rnd = this._current;
-  return rnd.name === 'GroupStage-Tb' && rnd.isTieBreakerRound();
+  var rnd = this._inst;
+  return rnd.name === 'GroupStage-Tb' && rnd.inTieBreaker();
 };
 
 GsTbDuel.prototype.inDuel = function () {
-  return this._current.name !== 'GroupStage-Tb';
+  return this._inst.name !== 'GroupStage-Tb';
 };
 
 //------------------------------------------------------------------
-// Stage advancer
+// Expected methods
 //------------------------------------------------------------------
 
-GsTbDuel.prototype._createNext = function () {
-  if (this.isDone()) {
-    return false;
-  }
-
-  // GsTb should do its own thing
-  
-  // NB: this is the reason Tourney does not own _current:
-  // now we can use _current as a Tourney
-  
+GsTbDuel.prototype._mustPropagate = function () {
+  return !this.inDuel();
 };
+
+GsTbDuel.prototype._createNext = function (stg) {
+   // only called when _mustPropagate && stageComplete => !inDuel
+   // either GsTb needs a TieBreaker round, or we must forward to the final Duel
+   if (!this._inst.stageDone()) {
+     return this._inst.createNextStage(stg); // GsTb can do its thing
+   }
+   // create duel - this._inst is a Tourney whose ._inst is the last TieBreaker
+   return Duel.from(this._inst._inst, this.opts.duelOpts);   
+};
+
+//------------------------------------------------------------------
+
+module.exports = GsTbDuel;

@@ -14,7 +14,10 @@
     "coverage": "jscoverage gstbduel.js && GS_TB_DUEL_COV=1 nodeunit --reporter=lcov test/*.js",
     "coveralls": "npm run coverage | coveralls"
   },
-  "dependencies": {},
+  "dependencies": {
+    "duel": "^2.1.0",
+    "groupstage-tb": "^1.0.0"
+  },
   "devDependencies": {
     "nodeunit": "^0.9.0",
     "jscoverage": "^0.5.6"
