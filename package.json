@@ -1,0 +1,26 @@
+{
+  "name": "groupstage-tb-duel",
+  "description": "Groupstage with TieBreakers piped into a Duel tournament",
+  "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "clux/groupstage-tb-duel"
+  },
+  "keywords": ["tourney"],
+  "main": "gstbduel.js",
+  "scripts": {
+    "test": "nodeunit --reporter=verbose test/*.js",
+    "coverage": "jscoverage gstbduel.js && GS_TB_DUEL_COV=1 nodeunit --reporter=lcov test/*.js",
+    "coveralls": "npm run coverage | coveralls"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "^0.9.0",
+    "jscoverage": "^0.5.6"
+  },
+  "bugs": {
+    "url": "http://github.com/clux/groupstage-tb-duel/issues"
+  },
+  "license": "MIT"
+}
