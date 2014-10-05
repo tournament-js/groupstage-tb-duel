@@ -7,21 +7,23 @@ var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, initParent) {
 });
 
 GsTbDuel.configure({
-  // NB: this simple version works only because Duel has `np` agnostic statics
-  // it would fail if the last stage was FFA which relies on correct `np`
-  // TODO: figure out what to do in this case
   defaults: function (np, opts) {
-    opts.gsTbOpts = opts.gsTbOpts || {};
-    GsTb.defaults(np, opts.gsTbOpts);
-    opts.duelOpts = opts.duelOpts || {};
-    Duel.defaults(np, opts.duelOpts);
+    opts.groupStage = opts.groupStage || {};
+    GsTb.defaults(np, opts.groupStage);
+    opts.duel = opts.duel || {};
+    Duel.defaults(np, opts.duel);
+    return opts;
   },
   invalid: function (np, opts) {
-    var invReason = GsTb.invalid(np, opts.gsTbOpts);
+    var invReason = GsTb.invalid(np, opts.groupStage);
     if (invReason !== null) {
       return invReason;
     }
-    invReason = Duel.invalid(np, opts.duelOpts);
+    invReason = Duel.invalid(opts.groupStage.limit, opts.duel);
+    if (invReason !== null) {
+      return invReason;
+    }
+    return null;
   }
 });
 
