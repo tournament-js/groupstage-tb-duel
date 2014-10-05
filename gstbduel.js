@@ -3,6 +3,7 @@ var GsTb = require('groupstage-tb');
 var Duel = require('duel');
 
 var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, initParent) {
+  this.opts = opts;
   initParent(new GsTb(this.numPlayers, opts.groupStage)); // stored on this._inst
 });
 
@@ -59,8 +60,8 @@ GsTbDuel.prototype._createNext = function (stg) {
    if (!this._inst.stageDone()) {
      return this._inst.createNextStage(stg); // GsTb can do its thing
    }
-   // create duel - this._inst is a Tourney whose ._inst is the last TieBreaker
-   return Duel.from(this._inst._inst, this.opts.duelOpts);   
+   this._inst.complete(); // lock down GsTb
+   return Duel.from(this._inst, this.opts.groupStage.limit, this.opts.duel);
 };
 
 //------------------------------------------------------------------
