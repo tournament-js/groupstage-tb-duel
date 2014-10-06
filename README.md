@@ -17,7 +17,7 @@ var opts = {
   duel: {} // opts from duel
 };
 var trn = GsDuel(32, opts);
-// scoring like it was a tournament
+// score it like it was a tournament
 trn.stageDone(); // when done scoring this is true
 trn.createNextStage();
 // if groupstage didn't tie we can start scoring duel now
