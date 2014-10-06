@@ -1,6 +1,6 @@
 {
   "name": "groupstage-tb-duel",
-  "description": "Groupstage with TieBreakers piped into a Duel tournament",
+  "description": "Groupstage with TieBreakers ending in Duel tournament",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "0.0.0",
   "repository": {
@@ -17,7 +17,7 @@
   "dependencies": {
     "duel": "^2.1.0",
     "groupstage-tb": "^1.0.0-0",
-    "tourney": "^1.0.0-0"
+    "tourney": "^1.0.0-1"
   },
   "devDependencies": {
     "groupstage": "^2.1.0",
