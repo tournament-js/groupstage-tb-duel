@@ -40,7 +40,7 @@ exports.sixteenIntoTbP3SE = function (t) {
   t.ok(trn.createNextStage(), 't2 created');
 
   // T2 - TieBreaker for G1
-  t.ok(!trn.inGroupStage() && trn.inTieBreaker() && !trn.inDuel(), "t2 TB");
+  t.ok(trn.inGroupStage() && trn.inTieBreaker() && !trn.inDuel(), "t2 TB");
   t.deepEqual(trn.players(), [1,5,12,16], 't3 contains g1');
   t.equal(trn.matches.length, 6, '3+2+1 matches for a group');
   trn.matches.forEach(function (m) {
@@ -55,7 +55,7 @@ exports.sixteenIntoTbP3SE = function (t) {
   t.ok(trn.createNextStage(), 't3 created');
 
   // T3 - TieBreaker for some of G1
-  t.ok(!trn.inGroupStage() && trn.inTieBreaker() && !trn.inDuel(), "t2 TB");
+  t.ok(trn.inGroupStage() && trn.inTieBreaker() && !trn.inDuel(), "t2 TB");
   t.deepEqual(trn.players(), [5,12,16], 't3 contains <g1');
   t.equal(trn.matches.length, 3, '2+1 matches for a group');
   trn.matches.forEach(function (m) {
