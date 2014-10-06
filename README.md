@@ -8,7 +8,23 @@
 A tourney that chains players though a `GroupStage` with possible `TieBreaker` round(s) (aka [groupstage-tb](https://www.npmjs.org/package/groupstage-tb)), then pipes the winners through to a final `Duel` elimination round.
 
 ## Usage
-Don't. It's not done yet.
+Require, specify rules and start sending scores to it:
+
+```js
+var GsDuel = require('groupstage-tb-duel');
+var opts = {
+  groupStage: { groupSize: 4, limit: 8 }, // opts from groupstage-tb
+  duel: {} // opts from duel
+};
+var trn = GsDuel(32, opts);
+// scoring like it was a tournament
+trn.stageDone(); // when done scoring this is true
+trn.createNextStage();
+// if groupstage didn't tie we can start scoring duel now
+// otherwise we will start scoring the tiebreaker
+```
+
+See [tourney](https://npmjs.org/tourney) for usage details.
 
 ## License
 MIT-Licensed. See LICENSE file for details.
