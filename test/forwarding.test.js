@@ -3,15 +3,19 @@ var GsTbDuel = require(process.env.GS_TB_DUEL_COV ? '../gstbduel-cov.js' : '../'
   , Duel = require('duel')
   , $ = require('autonomy');
 
-/*exports.invalid = function (t) {
+exports.invalid = function (t) {
   var inv = GsTbDuel.invalid;
   t.equal(inv(1), "numPlayers cannot be less than 2", "gs reason");
-  t.equal(inv(4), "need to specify a non-zero limit", "1st limitation");
-  t.equal(inv(8, { groupSize: 4, limit: 3}), "number of groups must divide limit",
-    'limit must be sensible'
+  t.equal(inv(4), "need to specify a non-zero limit", "gstb reason");
+  t.equal(inv(8, { groupStage: { groupSize: 8, limit: 4 }, duel: { last: 3 } }),
+    'last elimination bracket must be either WB or LB',
+    'duel reason - everything else valid'
+  );
+  t.equal(inv(8, { groupStage: { groupSize: 8, limit: 4 }, duel: { last: 1 } }),
+    null, 'all valid now'
   );
   t.done();
-};*/
+};
 
 exports.sixteenIntoTbP3SE = function (t) {
   var opts = {
