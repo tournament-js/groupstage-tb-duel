@@ -54,13 +54,8 @@ GsTbDuel.prototype._mustPropagate = function () {
   return !this.inDuel();
 };
 
-GsTbDuel.prototype._createNext = function (stg) {
-   // only called when _mustPropagate && stageComplete => !inDuel
-   // either GsTb needs a TieBreaker round, or we must forward to the final Duel
-   if (!this._inst.stageDone()) {
-     return this._inst.createNextStage(stg); // GsTb can do its thing
-   }
-   this._inst.complete(); // lock down GsTb
+GsTbDuel.prototype._createNext = function () {
+   // only called when _inst.isDone, but _mustPropagate
    return Duel.from(this._inst, this.opts.groupStage.limit, this.opts.duel);
 };
 
