@@ -2,12 +2,14 @@
   "name": "groupstage-tb-duel",
   "description": "Groupstage with TieBreakers ending in a Duel tournament",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
-  "version": "0.0.0",
+  "version": "1.0.0-0",
   "repository": {
     "type": "git",
     "url": "clux/groupstage-tb-duel"
   },
-  "keywords": ["tourney"],
+  "keywords": [
+    "tourney"
+  ],
   "main": "gstbduel.js",
   "scripts": {
     "test": "nodeunit --reporter=verbose test/*.js",
