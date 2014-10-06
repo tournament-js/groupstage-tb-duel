@@ -2,9 +2,8 @@ var Tourney = require('tourney');
 var GsTb = require('groupstage-tb');
 var Duel = require('duel');
 
-var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, initParent) {
-  this.opts = opts;
-  initParent(new GsTb(this.numPlayers, opts.groupStage)); // stored on this._inst
+var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, init) {
+  init(new GsTb(this.numPlayers, opts.groupStage));
 });
 
 GsTbDuel.configure({
@@ -25,17 +24,13 @@ GsTbDuel.configure({
 //------------------------------------------------------------------
 
 GsTbDuel.prototype.inGroupStage = function () {
-  var rnd = this._inst;
-  return rnd.name === 'GroupStage-Tb' && rnd.inGroupStage();
+  return this.getName(1) === 'GroupStage-Tb';
 };
-
 GsTbDuel.prototype.inTieBreaker = function () {
-  var rnd = this._inst;
-  return rnd.name === 'GroupStage-Tb' && rnd.inTieBreaker();
+  return this.getName(2) === 'GroupStage-Tb::TieBreaker';
 };
-
 GsTbDuel.prototype.inDuel = function () {
-  return this._inst.name !== 'GroupStage-Tb';
+  return this.getName(1) === 'Duel';
 };
 
 //------------------------------------------------------------------
@@ -43,12 +38,12 @@ GsTbDuel.prototype.inDuel = function () {
 //------------------------------------------------------------------
 
 GsTbDuel.prototype._mustPropagate = function () {
-  return !this.inDuel();
+  return this.inGroupStage();
 };
 
-GsTbDuel.prototype._createNext = function () {
-   // only called when _inst.isDone, but _mustPropagate
-   return Duel.from(this._inst, this.opts.groupStage.limit, this.opts.duel);
+GsTbDuel.prototype._createNext = function (stg, inst, opts) {
+   // called when _inst.isDone && _mustPropagate => inst is GsTb
+   return Duel.from(inst, opts.groupStage.limit, opts.duel);
 };
 
 //------------------------------------------------------------------
