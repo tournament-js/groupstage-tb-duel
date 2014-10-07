@@ -3,6 +3,7 @@
   "description": "Groupstage with TieBreakers ending in a Duel tournament",
   "author": "Eirik Albrigtsen <analsandblaster@gmail.com>",
   "version": "1.0.0-0",
+  "stability": "unstable",
   "repository": {
     "type": "git",
     "url": "clux/groupstage-tb-duel"
