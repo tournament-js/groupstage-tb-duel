@@ -42,7 +42,7 @@ GsTbDuel.prototype._mustPropagate = function () {
 };
 
 GsTbDuel.prototype._createNext = function (stg, inst, opts) {
-   // called when _inst.isDone && _mustPropagate => inst is GsTb
+   // called when stageDone && _mustPropagate => current is GsTb
    return Duel.from(inst, opts.groupStage.limit, opts.duel);
 };
 
