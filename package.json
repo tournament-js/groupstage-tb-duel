@@ -19,8 +19,8 @@
   },
   "dependencies": {
     "duel": "^2.1.0",
-    "groupstage-tb": "^1.0.0-1",
-    "tourney": "^1.0.0-2"
+    "groupstage-tb": "^1.0.0",
+    "tourney": "^1.0.0"
   },
   "devDependencies": {
     "groupstage": "^2.1.0",
