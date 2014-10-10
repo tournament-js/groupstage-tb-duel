@@ -14,7 +14,7 @@ Require, specify rules and start sending scores to it:
 var GsDuel = require('groupstage-tb-duel');
 var opts = {
   groupStage: { groupSize: 4, limit: 8 }, // opts from groupstage-tb
-  duel: {} // opts from duel
+  duel: { last: 2 } // opts from duel
 };
 var trn = GsDuel(32, opts);
 // score it like it was a tournament
