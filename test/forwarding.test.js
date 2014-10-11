@@ -167,5 +167,11 @@ exports.thirtytwoIntoP3DE = function (t) {
     ], "result positions"
   );
 
+  // verify .restore
+  var copy = GsTbDuel.restore(32, opts, trn.state);
+  t.ok(copy.isDone(), 'copy is done');
+  t.deepEqual(copy.oldMatches, trn.oldMatches, 'matches fully restored');
+  t.deepEqual(copy.state, trn.state, 'state fully restored');
+
   t.done();
 };
