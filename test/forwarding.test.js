@@ -1,9 +1,11 @@
-var GsTbDuel = require(process.env.GS_TB_DUEL_COV ? '../gstbduel-cov.js' : '../')
+var GsTbDuel = require('..')
   , GS = require('groupstage')
   , Duel = require('duel')
-  , $ = require('autonomy');
+  , dId = (s, r, m) => new Duel.Id(s, r, m)
+  , $ = require('autonomy')
+  , test = require('bandage');
 
-exports.invalid = function (t) {
+test('invalid', function *(t) {
   var inv = GsTbDuel.invalid;
   t.equal(inv(1), 'numPlayers cannot be less than 2', 'gs reason');
   t.equal(inv(4), 'need to specify a non-zero limit', 'gstb reason');
@@ -14,10 +16,9 @@ exports.invalid = function (t) {
   t.equal(inv(8, { groupStage: { groupSize: 8, limit: 4 }, duel: { last: 1 } }),
     null, 'all valid now'
   );
-  t.done();
-};
+});
 
-exports.sixteenIntoTbP3SE = function (t) {
+test('sixteenIntoTbP3SE', function *(t) {
   var opts = {
     groupStage: { groupSize: [4], limit: 8 },
     duel: { last: Duel.WB }
@@ -72,10 +73,10 @@ exports.sixteenIntoTbP3SE = function (t) {
   // T4 - Duel
   t.ok(!trn.inGroupStage() && !trn.inTieBreaker() && trn.inDuel(), 't4 Duel');
   var expT4 = [
-    { id: {s: 1, r: 1, m: 1}, p: [2,5] }, // seed 1 vs seed 8
-    { id: {s: 1, r: 1, m: 2}, p: [6,1] }, // seed 5 vs seed 4
-    { id: {s: 1, r: 1, m: 3}, p: [4,7] }, // seed 3 vs seed 6
-    { id: {s: 1, r: 1, m: 4}, p: [8,3] }  // seed 7 vs seed 2
+    { id: dId(1, 1, 1), p: [2,5] }, // seed 1 vs seed 8
+    { id: dId(1, 1, 2), p: [6,1] }, // seed 5 vs seed 4
+    { id: dId(1, 1, 3), p: [4,7] }, // seed 3 vs seed 6
+    { id: dId(1, 1, 4), p: [8,3] }  // seed 7 vs seed 2
   ];
   t.deepEqual(trn.matches.slice(0, 4), expT4, 't4 duel matches');
   trn.matches.forEach(function (m) {
@@ -109,11 +110,9 @@ exports.sixteenIntoTbP3SE = function (t) {
     13,13,13,13 ],     // 13th placers are 4th placers in their group
     'result positions'
   );
+});
 
-  t.done();
-};
-
-exports.thirtytwoIntoP3DE = function (t) {
+test('thirtytwoIntoP3DE', function *(t) {
   var opts = {
     groupStage: { groupSize: [4], limit: 8 },
     duel: { last: Duel.LB }
@@ -170,6 +169,4 @@ exports.thirtytwoIntoP3DE = function (t) {
   t.ok(copy.isDone(), 'copy is done');
   t.deepEqual(copy.oldMatches, trn.oldMatches, 'matches fully restored');
   t.deepEqual(copy.state, trn.state, 'state fully restored');
-
-  t.done();
-};
+});
