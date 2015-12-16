@@ -8,6 +8,7 @@ var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, init) {
 
 GsTbDuel.configure({
   defaults: function (np, opts) {
+    // TODO: push opts.log onto each sub
     opts.groupStage = GsTb.defaults(np, opts.groupStage || {});
     opts.duel = Duel.defaults(np, opts.duel || {});
     return opts;
@@ -19,9 +20,9 @@ GsTbDuel.configure({
   }
 });
 
-//------------------------------------------------------------------
+// ------------------------------------------------------------------
 // Stage identifiers
-//------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 GsTbDuel.prototype.inGroupStage = function () {
   return this.getName(1) === 'GroupStage-Tb';
@@ -33,19 +34,19 @@ GsTbDuel.prototype.inDuel = function () {
   return this.getName(1) === 'Duel';
 };
 
-//------------------------------------------------------------------
+// ------------------------------------------------------------------
 // Expected methods
-//------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 GsTbDuel.prototype._mustPropagate = function () {
   return this.inGroupStage();
 };
 
 GsTbDuel.prototype._createNext = function (stg, inst, opts) {
-   // called when stageDone && _mustPropagate => current is GsTb
-   return Duel.from(inst, opts.groupStage.limit, opts.duel);
+  // called when stageDone && _mustPropagate => current is GsTb
+  return Duel.from(inst, opts.groupStage.limit, opts.duel);
 };
 
-//------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 module.exports = GsTbDuel;
