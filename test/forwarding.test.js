@@ -115,7 +115,8 @@ test('sixteenIntoTbP3SE', function *(t) {
 test('thirtytwoIntoP3DE', function *(t) {
   var opts = {
     groupStage: { groupSize: [4], limit: 8 },
-    duel: { last: Duel.LB }
+    duel: { last: Duel.LB },
+    log: { error: function () {} } // void logs
   };
   var trn = new GsTbDuel(32, opts);
 
@@ -169,4 +170,45 @@ test('thirtytwoIntoP3DE', function *(t) {
   t.ok(copy.isDone(), 'copy is done');
   t.eq(copy.oldMatches, trn.oldMatches, 'matches fully restored');
   t.eq(copy.state, trn.state, 'state fully restored');
+});
+
+test('scoring logs', function *(t) {
+  var logCatch = {
+    error: function () {
+      t.pass('got error log');
+    }
+  };
+  t.plan(2*3 + 3); // 2 times amounts of fail scores + misc
+
+  var opts = {
+    groupStage: { groupSize: [4], limit: 4 },
+    duel: { last: Duel.WB }, // not LB so we don't get that unprepared GF2
+    log: logCatch
+  };
+  var trn = new GsTbDuel(8, opts);
+
+  // GroupStage
+  // fail score in GS round
+  trn.score(trn.matches[0].id, ['a']);
+  // score it so we get a TB
+  trn.matches.forEach((m) => trn.score(m.id, [1,1]));
+  trn.createNextStage();
+
+  // TB round
+  t.ok(trn.inTieBreaker(), 'in tb');
+  // score invalid
+  trn.score(trn.matches[0].id, ['a']);
+  // score and proceed to Duel
+  trn.matches.forEach((m) => trn.score(m.id, m.p[0] < m.p[1] ? [1,0] : [0,1]));
+  trn.createNextStage();
+
+  // Duel round
+  t.ok(trn.inDuel(), 'in final duel');
+  // score invalid
+  trn.score(trn.matches[0].id, ['a']);
+  // complete
+  trn.matches.forEach((m) => trn.score(m.id, m.p[0] < m.p[1] ? [1,0] : [0,1]));
+  trn.complete();
+
+  t.ok(trn.isDone(), 'done now');
 });

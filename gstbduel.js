@@ -8,9 +8,12 @@ var GsTbDuel = Tourney.sub('GroupStage-Tb-Duel', function (opts, init) {
 
 GsTbDuel.configure({
   defaults: function (np, opts) {
-    // TODO: push opts.log onto each sub
     opts.groupStage = GsTb.defaults(np, opts.groupStage || {});
     opts.duel = Duel.defaults(np, opts.duel || {});
+    if (opts.log) { // cascade log option down to each tournament
+      opts.groupStage.log = opts.log;
+      opts.duel.log = opts.log;
+    }
     return opts;
   },
   invalid: function (np, opts) {
